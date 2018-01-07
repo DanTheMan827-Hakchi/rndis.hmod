@@ -1,0 +1,42 @@
+#!/bin/sh
+write () {
+  echo "$2" > "$1"
+}
+start() {
+  write /sys/class/android_usb/android0/iManufacturer hakchi
+  write /sys/class/android_usb/android0/iProduct classic
+  write /sys/class/android_usb/android0/iSerial 3730BC73B12E00EC
+  write /sys/class/android_usb/android0/f_rndis/manufacturer hakchi
+  write /sys/class/android_usb/android0/f_rndis/vendorID 057e
+  write /sys/class/android_usb/android0/f_rndis/wceis 1
+  write /sys/class/android_usb/android0/enable 0
+  write /sys/class/android_usb/android0/idVendor 04e8
+  write /sys/class/android_usb/android0/idProduct 6863
+  write /sys/class/android_usb/android0/functions rndis
+  write /sys/class/android_usb/android0/bDeviceClass 224
+  write /sys/class/android_usb/android0/enable 1
+  ip link set rndis0 down
+  ip addr add 10.234.137.10/8 dev rndis0
+  ip link set rndis0 up
+  udhcpd /etc/udhcpd.conf
+}
+
+restart() {
+    start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    ;;
+  restart|reload)
+    restart
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?
