@@ -4,8 +4,8 @@ all: out/rndis-$(GIT_COMMIT).hmod
 
 out/rndis-$(GIT_COMMIT).hmod:
 	mkdir -p out/
-	chmod +x "mod/etc/init.d/S92rndis"
-	[ -f "out/rndis-$(GIT_COMMIT).hmod" ] || tar -czvf "out/rndis-$(GIT_COMMIT).hmod" -C mod/ etc
+	tar -czvf "$@" -C mod/ etc
+	touch "$@"
 
 clean: clean-hmod
 
